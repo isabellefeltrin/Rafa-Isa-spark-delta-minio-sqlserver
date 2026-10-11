@@ -56,13 +56,13 @@ cd ~
 git clone https://github.com/isabellefeltrin/spark-delta-minio-sqlserver.git
 cd spark-delta-minio-sqlserver
 uv sync
-cp .env.example .env   # opcional: os valores padrão já funcionam
+cp .env.example .env
 ```
 
 ## Howto
 
 ```bash
-docker compose up -d      # SQL Server (cria e popula o banco) + MinIO
+docker compose up -d
 uv run jupyter lab
 ```
 

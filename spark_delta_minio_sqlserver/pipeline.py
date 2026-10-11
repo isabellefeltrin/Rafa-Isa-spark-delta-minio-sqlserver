@@ -21,7 +21,6 @@ def ler_tabela(spark: SparkSession, tabela: str) -> DataFrame:
 
 
 def extrair_para_landing(spark: SparkSession) -> dict[str, int]:
-    """SQL Server -> s3a://landing-zone/<tabela>/ em CSV."""
     contagem = {}
     for tabela in listar_tabelas(spark):
         df = ler_tabela(spark, tabela)
@@ -38,7 +37,6 @@ def extrair_para_landing(spark: SparkSession) -> dict[str, int]:
 def landing_para_bronze(
     spark: SparkSession, tabelas: list[str]
 ) -> dict[str, int]:
-    """s3a://landing-zone/<tabela>/ (CSV) -> s3a://bronze/<tabela>/ (Delta)."""
     contagem = {}
     for tabela in tabelas:
         df = (
