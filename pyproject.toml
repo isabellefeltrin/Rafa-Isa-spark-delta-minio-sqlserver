@@ -1,0 +1,45 @@
+[project]
+name = "spark-delta-minio-sqlserver"
+version = "0.1.0"
+description = "SQL Server -> MinIO (landing-zone, CSV) -> Delta Lake (bronze) com Apache Spark"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "pyspark>=3.5.3,<3.6",
+    "delta-spark==3.3.2",
+    "boto3>=1.35",
+    "jupyterlab>=4.2",
+    "mkdocs>=1.6,<2",
+    "mkdocs-material>=9.5",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["spark_delta_minio_sqlserver"]
+
+[dependency-groups]
+dev = [
+    "blue>=0.9.1",
+    "isort>=9.0.2",
+    "pip-audit>=2.10.1",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.10",
+    "taskipy>=1.14.1",
+]
+
+[tool.taskipy.tasks]
+lint = "ruff check . && blue --check --diff . && isort --check ."
+format = "isort . && blue ."
+test = "pytest --cov=spark_delta_minio_sqlserver -vv"
+audit = "pip-audit"
+docs = "mkdocs serve"
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

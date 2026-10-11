@@ -1,0 +1,26 @@
+site_name: Spark, MinIO e Delta Lake
+repo_url: https://github.com/isabellefeltrin/spark-delta-minio-sqlserver
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    primary: green
+  features:
+    - content.code.copy
+
+nav:
+  - Contexto: index.md
+  - Pipeline: pipeline.md
+  - DML no Delta Lake: dml.md
+  - Gerenciadas x não gerenciadas: gerenciadas.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
