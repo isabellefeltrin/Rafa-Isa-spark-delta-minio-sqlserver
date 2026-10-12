@@ -8,7 +8,7 @@ Trabalho 2 de Engenharia de Dados (UNISATC), Prof. Jorge Luiz da Silva. Compleme
 
 **Integrantes:** Raffael Michels Arcego · Isabelle Luiz Feltrin
 
-📖 **Documentação completa:** https://isabellefeltrin.github.io/spark-delta-minio-sqlserver/
+📖 **Documentação completa:** https://isabellefeltrin.github.io/Rafa-Isa-spark-delta-minio-sqlserver/
 
 ```mermaid
 flowchart LR
@@ -53,8 +53,8 @@ source ~/.bashrc
 
 # 3. Projeto
 cd ~
-git clone https://github.com/isabellefeltrin/spark-delta-minio-sqlserver.git
-cd spark-delta-minio-sqlserver
+git clone https://github.com/isabellefeltrin/Rafa-Isa-spark-delta-minio-sqlserver.git
+cd Rafa-Isa-spark-delta-minio-sqlserver
 uv sync
 cp .env.example .env
 ```

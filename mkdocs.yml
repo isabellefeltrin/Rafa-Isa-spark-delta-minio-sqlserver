@@ -1,5 +1,5 @@
 site_name: Spark, MinIO e Delta Lake
-repo_url: https://github.com/isabellefeltrin/spark-delta-minio-sqlserver
+repo_url: https://github.com/isabellefeltrin/Rafa-Isa-spark-delta-minio-sqlserver
 
 theme:
   name: material
