@@ -24,7 +24,12 @@ df = spark.read.option("header", True).option("inferSchema", True) \
 df.write.format("delta").mode("overwrite").save(f"s3a://bronze/{tabela}")
 ```
 
-CSV não guarda tipos, então o `inferSchema` recupera `INT`, `DOUBLE` e `DATE`. Efeito colateral: `apolice.valor` (`DECIMAL` na origem) vira `DOUBLE` no bronze. Para manter a precisão, o schema deveria ser declarado explicitamente. Notebook: `01_landing_para_bronze.ipynb`.
+CSV não guarda tipos, então o `inferSchema` recupera `INT`, `DOUBLE` e `DATE`. Efeitos colaterais:
+
+- `apolice.valor` (`DECIMAL` na origem) vira `DOUBLE` no bronze;
+- `cliente.cpf` e `carro.chassi` (`VARCHAR` na origem, só com dígitos) viram `BIGINT`. Um CPF que comece com zero perderia o zero à esquerda.
+
+Para manter os tipos da origem, o schema deveria ser declarado explicitamente. Notebook: `01_landing_para_bronze.ipynb`.
 
 Estrutura de cada tabela no bucket `bronze`:
 
