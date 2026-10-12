@@ -499,11 +499,17 @@
 </code></pre></div>
 <p>Como todas as tabelas são listadas, uma tabela nova no banco entra na extração sem mudar o código. Notebook: <code>00_sqlserver_para_landing.ipynb</code>.</p>
 <h2 id="2-landing-zone-bronze-delta-lake">2. <code>landing-zone</code> → <code>bronze</code> (Delta Lake)</h2>
+<p>As tabelas convertidas são as pastas encontradas no bucket <code>landing-zone</code> (<code>pipeline.listar_landing()</code>), então tudo o que foi extraído chega ao <code>bronze</code> sem lista fixa no código.</p>
 <div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">"header"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">"inferSchema"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">"s3a://landing-zone/</span><span class="si">{</span><span class="n">tabela</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"delta"</span><span class="p">)</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">"overwrite"</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">"s3a://bronze/</span><span class="si">{</span><span class="n">tabela</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
-<p>CSV não guarda tipos, então o <code>inferSchema</code> recupera <code>INT</code>, <code>DOUBLE</code> e <code>DATE</code>. Efeito colateral: <code>apolice.valor</code> (<code>DECIMAL</code> na origem) vira <code>DOUBLE</code> no bronze. Para manter a precisão, o schema deveria ser declarado explicitamente. Notebook: <code>01_landing_para_bronze.ipynb</code>.</p>
+<p>CSV não guarda tipos, então o <code>inferSchema</code> recupera <code>INT</code>, <code>DOUBLE</code> e <code>DATE</code>. Efeitos colaterais:</p>
+<ul>
+<li><code>apolice.valor</code> (<code>DECIMAL</code> na origem) vira <code>DOUBLE</code> no bronze;</li>
+<li><code>cliente.cpf</code> e <code>carro.chassi</code> (<code>VARCHAR</code> na origem, só com dígitos) viram <code>BIGINT</code>. Um CPF que comece com zero perderia o zero à esquerda.</li>
+</ul>
+<p>Para manter os tipos da origem, o schema deveria ser declarado explicitamente. Notebook: <code>01_landing_para_bronze.ipynb</code>.</p>
 <p>Estrutura de cada tabela no bucket <code>bronze</code>:</p>
 <div class="highlight"><pre><span></span><code>bronze/carro/
 ├── part-00000-....snappy.parquet
