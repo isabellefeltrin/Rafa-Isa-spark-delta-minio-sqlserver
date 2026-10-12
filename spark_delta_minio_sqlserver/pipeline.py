@@ -53,17 +53,31 @@ def landing_para_bronze(
     return contagem
 
 
-def criar_buckets() -> None:
+def _cliente_s3():
     import boto3
 
     usuario, senha = config.minio_credentials()
-    s3 = boto3.client(
+    return boto3.client(
         's3',
         endpoint_url=config.minio_endpoint(),
         aws_access_key_id=usuario,
         aws_secret_access_key=senha,
     )
+
+
+def criar_buckets() -> None:
+    s3 = _cliente_s3()
     existentes = {b['Name'] for b in s3.list_buckets()['Buckets']}
     for bucket in (config.LANDING, config.BRONZE):
         if bucket not in existentes:
             s3.create_bucket(Bucket=bucket)
+
+
+def listar_landing() -> list[str]:
+    resposta = _cliente_s3().list_objects_v2(
+        Bucket=config.LANDING, Delimiter='/'
+    )
+    return sorted(
+        pasta['Prefix'].rstrip('/')
+        for pasta in resposta.get('CommonPrefixes', [])
+    )

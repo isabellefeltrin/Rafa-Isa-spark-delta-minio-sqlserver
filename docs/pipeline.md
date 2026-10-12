@@ -16,6 +16,8 @@ Como todas as tabelas são listadas, uma tabela nova no banco entra na extraçã
 
 ## 2. `landing-zone` → `bronze` (Delta Lake)
 
+As tabelas convertidas são as pastas encontradas no bucket `landing-zone` (`pipeline.listar_landing()`), então tudo o que foi extraído chega ao `bronze` sem lista fixa no código.
+
 ```python
 df = spark.read.option("header", True).option("inferSchema", True) \
     .csv(f"s3a://landing-zone/{tabela}")
