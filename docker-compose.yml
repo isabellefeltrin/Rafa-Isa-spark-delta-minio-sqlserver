@@ -26,7 +26,8 @@ services:
       -P '${SQLSERVER_PASSWORD:-SqlServer@2025!}' -i /sql/01_seguradora.sql"
 
   minio:
-    image: minio/minio:RELEASE.2025-02-03T21-03-04Z
+    # A imagem oficial minio/minio saiu do Docker Hub; pgsty/minio é um fork que mantém o console.
+    image: pgsty/minio:RELEASE.2026-08-04T00-00-00Z
     container_name: minio
     command: server /data --console-address ':9001'
     environment:
