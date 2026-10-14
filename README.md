@@ -38,7 +38,7 @@ flowchart LR
 | hadoop-aws         | 3.3.4                          |
 | mssql-jdbc         | 12.8.1                         |
 | SQL Server         | 2022 (contêiner)               |
-| MinIO              | RELEASE.2025-02-03 (contêiner) |
+| MinIO              | `pgsty/minio` RELEASE.2026-08-04 (contêiner) |
 | jupyterlab, mkdocs | 4.x, 1.6 + material            |
 
 ## Instalação
