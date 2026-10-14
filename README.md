@@ -75,7 +75,7 @@ Rode os notebooks em ordem, cada um com **Run All**:
 | `02_dml_delta.ipynb`                    | `INSERT`, `UPDATE`, `DELETE`, histórico e _time travel_ na tabela `carro` |
 | `03_gerenciada_vs_nao_gerenciada.ipynb` | Compara tabelas gerenciadas e não gerenciadas                             |
 
-Console do MinIO: http://localhost:9001 (`minioadmin` / `minioadmin`).
+Console do MinIO: http://127.0.0.1:9001 (`minioadmin` / `minioadmin`). No Windows com WSL, `localhost` pode não responder.
 
 Para encerrar: `docker compose down` (acrescente `-v` para apagar os dados).
 
@@ -153,6 +153,9 @@ O contêiner `sqlserver-init` cria o banco depois que o SQL Server fica saudáve
 | Uma tabela nova no SQL Server iria para a `landing-zone`, mas não para o `bronze`                       | O notebook 01 tinha a lista de tabelas fixa no código                                                                         | Criamos `pipeline.listar_landing()`, que lista as pastas do bucket `landing-zone`, e o notebook 01 passou a usá-la                                   |
 | `apolice.valor` virou `DOUBLE` e `cpf`/`chassi` viraram `BIGINT` no `bronze`                            | CSV não guarda tipos; o `inferSchema` deduz o tipo pelo conteúdo                                                              | Documentado em [Pipeline](https://isabellefeltrin.github.io/Rafa-Isa-spark-delta-minio-sqlserver/pipeline/). A solução completa é declarar o schema |
 | `pull access denied for minio/minio` no `docker compose up`, e o console em `localhost:9001` não abria   | O MinIO deixou de publicar a imagem oficial no Docker Hub e no quay.io                                                        | Trocamos para `pgsty/minio`, um fork comunitário que mantém o console web e aceita os mesmos comandos                                               |
+| WSL caiu com `Falha catastrófica` (`Wsl/Service/E_UNEXPECTED`) e depois dava `Input/output error`        | O disco C: encheu durante o `docker compose up`; o disco virtual do Ubuntu (`ext4.vhdx`) fica no C: e não tinha como crescer | Liberamos espaço no C:, rodamos `wsl --shutdown` e limpamos imagens antigas do Docker (`docker image prune -a`)                                      |
+| Console do MinIO em `http://localhost:9001` ficava carregando até dar timeout no navegador do Windows   | O Windows resolve `localhost` primeiro como IPv6 (`::1`), e o encaminhamento de portas do WSL só respondia em IPv4             | Acessar por `http://127.0.0.1:9001`                                                                                                                  |
+| `bad object HEAD` e `empty compose file` depois do travamento                                            | O WSL caiu no meio de um `git pull`, e os arquivos que estavam sendo gravados ficaram vazios                                  | Renomeamos o clone quebrado, clonamos de novo e trouxemos de volta só o que não estava no git (notebook alterado, `.venv`, `.env`)                    |
 | `INSERT` duplicado ao rodar o notebook 02 duas vezes                                                     | Cada execução grava uma nova versão na mesma tabela Delta                                                                     | Rodar o notebook 01 de novo antes do 02 (ele sobrescreve a tabela do `bronze`)                                                                       |
 
 ## Referências
